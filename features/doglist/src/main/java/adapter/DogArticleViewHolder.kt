@@ -5,24 +5,29 @@ import android.widget.ImageSwitcher
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dog_observer.R
-import com.example.dog_observer.models.DogArticle
+import com.example.doglist.R
+import com.example.doglist.databinding.FragmentDogListBinding
 import com.squareup.picasso.Picasso
+import com.example.utils.models.DogArticle
 import java.lang.ref.WeakReference
 
-class DogArticleViewHolder(itemView: View, listener: DogsAdapter.OnItemClickListener): RecyclerView.ViewHolder(itemView)  {
+class DogArticleViewHolder( itemView: View, listener: DogsAdapter.onArticleListener): RecyclerView.ViewHolder(itemView)  {
     private val view = WeakReference(itemView)
     private var textViewTitle: TextView?=null
     private var imageView: ImageView?=null
     private var imageSwitcher: ImageSwitcher? = null
     var dogArticle: DogArticle? = null
+
+
     init {
         view.get()?.let {
-            textViewTitle= it.findViewById(R.id.dogFact)
+            //binding=FragmentDogListBinding.bind(it)
+            textViewTitle=  it.findViewById(R.id.dogFact)
             imageView = it.findViewById(R.id.dogImage)
             imageSwitcher = it.findViewById(R.id.favSwitcher)
             imageSwitcher?.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                listener.onArticleClick(adapterPosition)
+                imageSwitcher?.showNext()
             }
         }
 
@@ -33,15 +38,14 @@ class DogArticleViewHolder(itemView: View, listener: DogsAdapter.OnItemClickList
         if(dogArticle?.url != null)
         Picasso.get()
             .load(dogArticle?.url)
-            .error(R.drawable.ic_launcher_background)
+            .error(com.google.android.material.R.drawable.m3_popupmenu_background_overlay)
             .into(imageView)
-      //  imageView?.setImageURI()
         //imageView?. = job?.location
     }
 
 
 }
-class FooterViewHolder(itemView: View, listener: DogsAdapter.OnItemClickListener): RecyclerView.ViewHolder(itemView) {
+class FooterViewHolder(itemView: View, listener: DogsAdapter.onArticleListener): RecyclerView.ViewHolder(itemView) {
     private var loadButton: Button? = null
     init{
         loadButton=itemView.findViewById(R.id.loadButton)

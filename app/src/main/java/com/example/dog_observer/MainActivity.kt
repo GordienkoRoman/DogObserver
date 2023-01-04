@@ -1,84 +1,60 @@
 package com.example.dog_observer
 
-import DogsAdapter
+import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.dog_observer.viewmodels.DogsViewModel
-import com.example.dog_observer.models.DogArticle
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavGraph
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.dog_observer.databinding.ActivityMainBinding
 
+class MainActivity : AppCompatActivity() {
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), DogsAdapter.OnItemClickListener {
-    private lateinit var dogsAdapter: DogsAdapter
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel by viewModels<MainActivityVeiwModel>()
 
-    // @Inject
-    private lateinit var viewModel: DogsViewModel
-
-    // private lateinit var binding: ActivityMainBinding
-    private val recyclerJob: RecyclerView by lazy {
-        findViewById(R.id.jobRecycler)
-    }
-
-    /* val Context.appComponent: AppComponent
-         get() = when (this) {
-             is App -> appComponent
-             else -> applicationContext.appComponent
-         }*/
-    lateinit var factory: ViewModelProvider.Factory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        //  appComponent.inject(this)
-        // val appCompoonent:AppCompoonent = DaggerAppCompoonent.create()
-        //viewModel=appCompoonent.getViewModel()
-        viewModel = ViewModelProvider(this).get(DogsViewModel::class.java)
-        DataBindingUtil.setContentView<ActivityMainBinding>(
-            this, R.layout.activity_main
-        ).apply {
-            this.lifecycleOwner = this@MainActivity
-            this.viewmodel=viewModel
-        }
-        // viewModel = DogsViewModel(DogArticlesLoadImpl())
-        // binding.viewModel = viewModel
-        setupAdapter()
-        // viewModel = ViewModelProvider(this).get(DogsViewModel::class.java)
-        viewModel.state.observe(
-            this@MainActivity
-        ) { state ->
-            when (state) {
-                is State.LoadedState<*> -> {
-                    dogsAdapter.setData(state.data as MutableList<DogArticle>)
-                }
-                else -> {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        setupNavigation()
+        val navController = navHostFragment.navController
+       // navController.navigate(R.id.action_loginFragment_to_dogListFragment)
+    }
 
-                }
+    private fun setupNavigation() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.dogListFragment,
+                R.id.favouritesFragment
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.favouritesFragment -> supportActionBar?.hide()
+                else -> supportActionBar?.show()
             }
-
         }
-        viewModel.loadData(0)
-
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
 
-    fun setupAdapter() {
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        dogsAdapter = DogsAdapter()
-        recyclerJob.layoutManager = layoutManager
-        dogsAdapter.setOnItemClickListener(this)
-        recyclerJob.adapter = dogsAdapter
-    }
-
-
-    override fun onItemClick(position: Int) {
-        viewModel.setFavorite(position)
-    }
-
-    override fun onFooterClick() {
-        recyclerJob.adapter?.let { viewModel.loadData(it.itemCount - 1) }
-    }
-
-
+//    private fun observeViewModel()
+//    {
+//        viewModel..navigation.observe(this)
+//        {
+//            findNavController(R.id.nav_host_fragment).navigate(it)
+//        }
+//    }
 }

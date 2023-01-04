@@ -1,8 +1,7 @@
-package com.example.dog_observer
-
-sealed class State {
+sealed class State  {
+    class DefaultState: State()
     class LoadingState : State()
-    class DefaultState : State()
+    class LoadedItemState<T>(val item: T) : State()
     class ErrorState : State()
     class LoadedState<T>(val data: MutableList<T>) : State()
 }

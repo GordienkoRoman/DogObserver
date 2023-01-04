@@ -6,10 +6,19 @@
         <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/drawable/custom_button.xml" value="0.193" />
         <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/drawable/ic_heart_red.xml" value="0.1105" />
         <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/drawable/ic_heart_white.xml" value="0.124" />
-        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/drawable/ic_launcher_background.xml" value="0.192" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/layout/dog_view.xml" value="0.11302083333333333" />
         <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/layout/dog_view_item.xml" value="0.253125" />
         <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/layout/footer_view_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/features/doglist/src/main/res/drawable/ic_heart_red.xml" value="0.149" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/features/doglist/src/main/res/drawable/ic_heart_white.xml" value="0.149" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/features/doglist/src/main/res/layout/custom_button.xml" value="0.175" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/features/doglist/src/main/res/layout/dog_view_item.xml" value="0.14629629629629629" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/features/doglist/src/main/res/layout/footer_view_item.xml" value="0.14629629629629629" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/features/doglist/src/main/res/layout/fragment_dog_list.xml" value="0.25416666666666665" />
+        <entry key="..\:/android_projects/kortlin_projects/Dog_Observer/features/favourites/src/main/res/layout/fragment_favourites.xml" value="0.1609375" />
       </map>
     </option>
   </component>

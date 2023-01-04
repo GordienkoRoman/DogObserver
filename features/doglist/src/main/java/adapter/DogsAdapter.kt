@@ -2,16 +2,24 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dog_observer.R
-import com.example.dog_observer.models.DogArticle
+import com.example.doglist.R
+import com.example.utils.models.DogArticle
 
-public class DogsAdapter() :
+public class DogsAdapter(onArticleListener: onArticleListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val dogArticleList = mutableListOf<DogArticle>()
-    private val HEADER_VIEW_TYPE: Int = 1
-    private val FOOTER_VIEW_TYPE: Int = 2
-    private lateinit var onClickListener: OnItemClickListener
-   //private val mListener: OnItemClickListener = OnItemClickListener()
+    var dogArticleList = mutableListOf<DogArticle>()
+        set(newValue) {
+            field = newValue
+            notifyDataSetChanged()
+        }
+
+    private companion object {
+        const val HEADER_VIEW_TYPE = 1
+        const val FOOTER_VIEW_TYPE = 2
+    }
+
+    private val listener = onArticleListener
+    //private val mListener: OnItemClickListener = OnItemClickListener()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newArticles: MutableList<DogArticle>) {
@@ -21,52 +29,48 @@ public class DogsAdapter() :
     }
 
     override fun getItemViewType(position: Int): Int {
-         if(position==dogArticleList.size)
-             return FOOTER_VIEW_TYPE
+
+        when (position) {
+            dogArticleList.size -> return FOOTER_VIEW_TYPE
+        }
         return super.getItemViewType(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if(viewType==FOOTER_VIEW_TYPE)
+        if (viewType == FOOTER_VIEW_TYPE)
             return FooterViewHolder(
                 itemView = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.footer_view_item, parent, false),onClickListener)
+                    .inflate(R.layout.footer_view_item, parent, false), listener
+            )
         //if (viewType==HEADER_VIEW_TYPE)
         //   return JobViewHolder(itemView = LayoutInflater.from(parent.context).inflate(R.layout.job_header,parent,false))
         return DogArticleViewHolder(
             itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.dog_view_item, parent, false),onClickListener
+                .inflate(R.layout.dog_view_item, parent, false), listener
         )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         //holder.bind(model = dogArticleList[position])
-        if(holder is DogArticleViewHolder)
-        {
+        if (holder is DogArticleViewHolder) {
             holder.dogArticle = dogArticleList[position]
             holder.updateView()
         }
     }
 
     fun insertItem(item: DogArticle) {
-        dogArticleList.add(0, item)
-        notifyItemInserted(0)
+        dogArticleList.add( item)
+        notifyItemInserted(dogArticleList.size)
     }
 
     override fun getItemCount(): Int {
-        return dogArticleList.count()+1
+        return dogArticleList.count() + 1
     }
 
-    fun loadData(list: MutableList<DogArticle>) {
-        dogArticleList.addAll(list)
-        notifyItemRangeChanged(dogArticleList.size - list.size + 1, list.size)
-    }
-    fun setOnItemClickListener(listener: OnItemClickListener)
-    {
-        onClickListener=listener
-    }
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
+
+
+    interface onArticleListener {
+        fun onArticleClick(position: Int)
         fun onFooterClick()
     }
 }
