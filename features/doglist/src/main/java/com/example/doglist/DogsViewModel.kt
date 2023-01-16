@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class DogsViewModel @Inject constructor (
     //repository: DogArticlesRepository,
-    dogApiImgService: DogApiImgService,
+   // dogApiImgService: DogApiImgService,
 
 ) : ViewModel(){
     //val state = MutableLiveData<State>(State.DefaultState())
@@ -28,7 +28,7 @@ class DogsViewModel @Inject constructor (
    // private var mServiceFact = RetrofitCLient(urlFacts).retrofitFactService
    // private var mServiceImg= RetrofitCLient(urlImage).retrofitImageService
 
-    private var mServiceImg = dogApiImgService
+    //private var mServiceImg = dogApiImgService
     private val _dogArticleList = mutableListOf<DogArticle>()
     val dogArticleList
          get() =_dogArticleList
@@ -72,9 +72,9 @@ class DogsViewModel @Inject constructor (
     fun onGoToImdbClicked() {
         println("123")
     }
-    class Factory @Inject constructor(private val dogApiImgService: DogApiImgService) : ViewModelProvider.Factory{
+   /* class Factory @Inject constructor(private val dogApiImgService: DogApiImgService) : ViewModelProvider.Factory{
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return DogsViewModel(dogApiImgService) as T
         }
-    }
+    }*/
 }

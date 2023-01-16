@@ -9,5 +9,6 @@ import com.example.utils.DogApiImgService
 import javax.inject.Inject
 
 class MainActivityVeiwModel @Inject constructor() : ViewModel() {
+    public val str = "123"
 
 }

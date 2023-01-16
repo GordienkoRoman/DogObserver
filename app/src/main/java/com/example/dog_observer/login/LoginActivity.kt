@@ -1,7 +1,7 @@
 package com.example.dog_observer.login
 
-import android.R.attr.data
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.dog_observer.MainActivity
 import com.example.dog_observer.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -43,7 +44,18 @@ class LoginActivity : AppCompatActivity() {
     {
         val signInIntent = mGoogleSignInClient.signInIntent
 
-        getContent.launch(signInIntent)
+   //     getContent.launch(signInIntent)
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+        val acct = GoogleSignIn.getLastSignedInAccount(this)
+        if (acct != null) {
+            val personName = acct.displayName
+            val personGivenName = acct.givenName
+            val personFamilyName = acct.familyName
+            val personEmail = acct.email
+            val personId = acct.id
+            val personPhoto: Uri? = acct.photoUrl
+        }
 
     }
 

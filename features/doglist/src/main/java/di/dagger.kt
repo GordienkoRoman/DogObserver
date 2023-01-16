@@ -1,5 +1,6 @@
 package di
 
+import android.content.Context
 import com.example.doglist.DogListFragment
 import com.example.doglist.DogsViewModel
 import com.example.utils.DogApiImgService
@@ -11,13 +12,14 @@ import javax.inject.Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Feature
 
-@[Feature Component(dependencies = [ArticlesDependencies::class])]
+@[Feature Component(/*dependencies = [ArticlesDependencies::class]*/)]
 internal interface ArticlesComponent {
     fun inject(fragment: DogListFragment)
+
     @Component.Builder
     interface Builder
     {
-        fun dependencies(dependencies: ArticlesDependencies): Builder
+     //   fun dependencies(dependencies: ArticlesDependencies): Builder
 
         fun Build(): ArticlesComponent
     }

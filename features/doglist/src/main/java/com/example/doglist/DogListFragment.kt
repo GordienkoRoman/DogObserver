@@ -15,14 +15,16 @@ import androidx.room.Room
 import com.example.doglist.databinding.FragmentDogListBinding
 import com.example.utils.models.DogArticle
 import di.ArticlesComponent
+import di.ArticlesDependencies
+import di.DaggerArticlesComponent
 import room.AppDatabase
 import room.RoomArticlesRepository
 import javax.inject.Inject
 
 class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
 
-    @Inject
-    internal lateinit var dogArticleViewModelFactory:dagger.Lazy <DogsViewModel.Factory>
+  /*  @Inject
+    internal lateinit var dogArticleViewModelFactory:dagger.Lazy <DogsViewModel.Factory>*/
 
     companion object {
         fun newInstance() = DogListFragment()
@@ -39,6 +41,11 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
 
     override fun onAttach(context: Context) {
         //ViewModelProvider(this).get<ArticlesComponent
+        val artComponent: ArticlesComponent by lazy {
+            DaggerArticlesComponent.builder()
+                .Build()
+        }
+        artComponent.inject(this)
         super.onAttach(context)
     }
     override fun onCreateView(
@@ -76,6 +83,7 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
 
     override fun onDestroyView() {
        // viewModel.state.value=State.DefaultState()
+        _binding=null
         super.onDestroyView()
     }
 
@@ -86,7 +94,7 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
     }
 
     override fun onFooterClick() {
-        //viewModel.loadData(viewModel.dogArticleList.size)
+        dogsViewModel.loadData(dogsViewModel.dogArticleList.size)
 
         // .adapter?.let { viewModel.loadData(it.itemCount - 1) }
     }

@@ -2,6 +2,7 @@ package com.example.dog_observer
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -43,7 +44,11 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.favouritesFragment -> supportActionBar?.hide()
+
+                R.id.favouritesFragment -> {
+                    Toast.makeText(this, viewModel.str, Toast.LENGTH_LONG).show()
+                    supportActionBar?.hide()
+            }
                 else -> supportActionBar?.show()
             }
         }
