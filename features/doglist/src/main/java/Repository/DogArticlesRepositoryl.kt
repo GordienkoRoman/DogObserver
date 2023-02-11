@@ -1,7 +1,8 @@
 package Repository
 
+import com.example.utils.models.DogArticle
 
 
 interface DogArticlesRepository {
-    fun loadItem()
+    fun getDogArticle() : DogArticle
 }

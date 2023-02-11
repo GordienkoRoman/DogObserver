@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
 import androidx.navigation.NavGraphNavigator
-import com.example.utils.DogApiImgService
+import retrofit2.Retrofit
 import javax.inject.Inject
 
-class MainActivityVeiwModel @Inject constructor() : ViewModel() {
+class MainActivityVeiwModel @Inject constructor(
+    retrofit: Retrofit
+) : ViewModel() {
     public val str = "123"
 
 }

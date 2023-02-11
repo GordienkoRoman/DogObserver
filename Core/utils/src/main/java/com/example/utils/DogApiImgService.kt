@@ -5,17 +5,17 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-interface DogApiImgService {
+/*interface DogApiImgService {
     // interface DogApiImgService {
 
     @GET("woof.json")
     fun getDogImg(): Call<DogArticle>
     // }
-    /* interface DogApiFactsService {
+    *//* interface DogApiFactsService {
         @GET("api/facts")
         fun getDogFact(): Call<DogArticle>
 
-    }*/
+    }*//*
 }
     fun  DogApiImgService():DogApiImgService
     {
@@ -23,4 +23,4 @@ interface DogApiImgService {
             .baseUrl("https://random.dog/")
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(DogApiImgService::class.java)
-    }
+    }*/

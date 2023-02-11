@@ -1,5 +1,6 @@
 package com.example.dog_observer.login
 
+import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +11,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.dog_observer.App
 import com.example.dog_observer.MainActivity
+import com.example.dog_observer.dagger.AppComponent
+import com.example.dog_observer.dagger.DaggerAppComponent
+import com.example.dog_observer.dagger.DaggerLoginComponent
+import com.example.dog_observer.dagger.LoginComponent
 import com.example.dog_observer.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -21,8 +28,15 @@ import com.google.android.gms.tasks.Task
 
 
 class LoginActivity : AppCompatActivity() {
+
+    private val component by lazy{
+        DaggerLoginComponent.builder()
+            .Build()
+    }
     private lateinit var binding: ActivityLoginBinding
-    private val viewModel by viewModels<LoginActivityViewModel>()
+    private val viewModel by viewModels<LoginActivityViewModel>(){
+        component.viewModelFactory()
+    }
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var getContent: ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
     fun onClick(view: View)
     {
         val signInIntent = mGoogleSignInClient.signInIntent
-
    //     getContent.launch(signInIntent)
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
@@ -59,11 +72,12 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+
     override fun onStart() {
         val account = GoogleSignIn.getLastSignedInAccount(this)
         if(account != null)
         {
-            Toast.makeText(this,"already",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,viewModel.str ,Toast.LENGTH_SHORT).show()
         }
         super.onStart()
     }

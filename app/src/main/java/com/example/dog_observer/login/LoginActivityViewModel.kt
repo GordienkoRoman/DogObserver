@@ -1,13 +1,16 @@
 package com.example.dog_observer.login
 
-import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
-import com.example.dog_observer.MainActivity
+import restAPI.DogApiFactsService
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class LoginActivityViewModel @Inject constructor(): ViewModel() {
+class LoginActivityViewModel @Inject constructor(
+): ViewModel() {
+    val str = "loginviewmodel"
     init {
         if (!userLoggedIn) {
         } else {

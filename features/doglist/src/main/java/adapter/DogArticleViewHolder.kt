@@ -37,7 +37,8 @@ class DogArticleViewHolder( itemView: View, listener: DogsAdapter.onArticleListe
         textViewTitle?.text = dogArticle?.facts?.get(0)
         if(dogArticle?.url != null)
         Picasso.get()
-            .load(dogArticle?.url)
+            //.load(dogArticle?.url)
+            .load("https://i.pinimg.com/564x/15/36/e7/1536e7de67f8f992c595a308ec8ae363.jpg")
             .error(com.google.android.material.R.drawable.m3_popupmenu_background_overlay)
             .into(imageView)
         //imageView?. = job?.location

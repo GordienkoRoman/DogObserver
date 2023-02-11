@@ -1,25 +1,36 @@
 package com.example.dog_observer.dagger
 
+import Repository.DogArticlesRepository
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.example.dog_observer.BuildConfig
 import com.example.dog_observer.MainActivityVeiwModel
-import com.example.utils.DogApiImgService
-import dagger.BindsInstance
-import di.ArticlesDependencies
-import dagger.Component
-import dagger.Module
-import dagger.Provides
+import com.example.doglist.DogsViewModel
+import dagger.*
+import dagger.multibindings.IntoMap
+import di.ArticlesDeps
+import implementations.DogArticlesRepositoryImpl
+import restAPI.DogApiFactsService
+import restAPI.DogApiImgService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import javax.inject.Provider
 import javax.inject.Qualifier
+import javax.inject.Scope
 import javax.inject.Singleton
+import kotlin.reflect.KClass
 
-@Component(modules = [AppModule::class])
-interface AppComponent : ArticlesDependencies {
-    override val dogApiImgService: DogApiImgService
+@Scope
+annotation class AppScope
+
+@[AppScope Component(modules = [AppModule::class,ViewModelModule::class])]
+interface AppComponent : ArticlesDeps {
+
+    override val factsService: DogApiFactsService
 
     @Component.Builder
     interface Builder {
@@ -29,13 +40,36 @@ interface AppComponent : ArticlesDependencies {
 
         fun build(): AppComponent
     }
+
 }
 
+@Module
+abstract class ViewModelModule {
+
+    @Target(
+        AnnotationTarget.FUNCTION,
+        AnnotationTarget.PROPERTY_GETTER,
+        AnnotationTarget.PROPERTY_SETTER
+    )
+    @Retention(AnnotationRetention.RUNTIME)
+    @MapKey
+    internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
+
+    @Binds
+    internal abstract fun bindViewModelFactory(factory: viewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DogsViewModel::class)
+    internal abstract fun dogsViewModel(viewModel: DogsViewModel): ViewModel
+
+
+}
 
 @Module
-class AppModule{
-    @Provides
-    fun providesArticleService(): DogApiImgService = DogApiImgService()
+class AppModule {
+    /*  @Provides
+      fun providesArticleService(): DogApiImgService = DogApiImgService()*/
 
 
     @Provides
@@ -45,25 +79,31 @@ class AppModule{
     }
 
     @Provides
-    @Singleton
     fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory {
         return GsonConverterFactory.create(gson)
     }
 
-   /* @Provides
-    fun provideDogApiFactService(
-        retrofit: Retrofit): DogApiFactsService {
+    @[Provides AppScope]
+    fun provideDogApiFactService(): DogApiFactsService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://dog-api.kinduff.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
         return retrofit.create(DogApiFactsService::class.java)
-    }*/
+    }
 
- /*   @Provides
-    fun provideDogApiImgService(
-
-        retrofit: Retrofit): DogApiImgService {
-        return retrofit.create(DogApiImgService::class.java)
-    }*/
 
     @Provides
+    fun provideDogApiImgService(): DogApiImgService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://random.dog/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit.create(DogApiImgService::class.java)
+    }
+
+
+    /*@Provides
     @Singleton
     fun provideRetrofitBuilder(
         converterFactory: GsonConverterFactory,
@@ -73,7 +113,7 @@ class AppModule{
             .baseUrl("https://dog-api.kinduff.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-    }
+    }*/
 
 }
 

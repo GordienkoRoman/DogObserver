@@ -8,23 +8,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.doglist.databinding.FragmentDogListBinding
 import com.example.utils.models.DogArticle
 import di.ArticlesComponent
-import di.ArticlesDependencies
-import di.DaggerArticlesComponent
+import di.ArticlesComponentViewModel
 import room.AppDatabase
 import room.RoomArticlesRepository
 import javax.inject.Inject
 
 class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
 
-  /*  @Inject
-    internal lateinit var dogArticleViewModelFactory:dagger.Lazy <DogsViewModel.Factory>*/
+
+  /*  private val component by lazy{
+        DaggerArticlesComponent.builder()
+            .Build()
+    }*/
+  @Inject
+  lateinit var viewmodelFactory: DogsViewModel.DogsViewModelFactory
+
+    private val dogsViewModel by viewModels<DogsViewModel> { viewmodelFactory }
 
     companion object {
         fun newInstance() = DogListFragment()
@@ -32,7 +40,9 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
     private var _binding: FragmentDogListBinding? = null
     private val binding get() = requireNotNull(_binding) { "Binding not set" }
 
-    private val dogsViewModel by viewModels<DogsViewModel>()
+ /*   private val dogsViewModel by viewModels<DogsViewModel>(){
+        component.viewModelFactory()
+    }*/
 
     private lateinit var database: AppDatabase
     private lateinit var articlesRepository: RoomArticlesRepository
@@ -40,12 +50,15 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
     private val dogAdapter = DogsAdapter(this)
 
     override fun onAttach(context: Context) {
+        ViewModelProvider(this).get<ArticlesComponentViewModel>()
+            .component.inject(this)
         //ViewModelProvider(this).get<ArticlesComponent
-        val artComponent: ArticlesComponent by lazy {
+      /*  val artComponent: ArticlesComponent by lazy {
             DaggerArticlesComponent.builder()
                 .Build()
+
         }
-        artComponent.inject(this)
+        artComponent.inject(this)*/
         super.onAttach(context)
     }
     override fun onCreateView(
@@ -63,6 +76,21 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
                     false,
                 )
                 setHasFixedSize(true)
+            }
+            dogsViewModel.state.observe(viewLifecycleOwner) {state ->
+                when (state) {
+                    is State.LoadedState<*> -> {
+                        dogAdapter.setData(state.data as MutableList<DogArticle>)
+                    }
+                    is State.LoadedItemState<*> ->
+                    {
+                        dogAdapter.insertItem(state.item as DogArticle)
+                    }
+                    else ->{
+
+                    }
+                }
+
             }
             database =  Room.databaseBuilder(context,AppDatabase::class.java,"database.db")
                 .createFromAsset("database.db")
