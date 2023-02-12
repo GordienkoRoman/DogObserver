@@ -6,9 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.utils.models.DogArticle
-import restAPI.DogApiFactsService
-import restAPI.DogApiImgService
-import restAPI.RetrofitCLient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,23 +30,40 @@ class DogsViewModel @Inject constructor (
          get() =_dogArticleList
     fun loadData(position: Int) {
         state.value = State.LoadingState()
-        val dogArticle:DogArticle = repository.getDogArticle()
-        _dogArticleList.add(DogArticle("", mutableListOf("123")))
+        _dogArticleList.add(DogArticle("", mutableListOf()))
+        getItem()
        // _dogArticleList.add(api.getDogArticle())
-        state.value = State.LoadedItemState(_dogArticleList[position])
         //getDogArticle(position)
     }
 
 
+    private fun getItem(){
+        val responseFact = repository.getDogFact()
+        val responseImg = repository.getDogImg()
+        val callback = object : Callback<DogArticle> {
+            override fun onResponse(call: Call<DogArticle>, response: Response<DogArticle>) {
+               updateItem( response.body() as DogArticle)
+            }
 
-    private fun updateItem(position: Int, dogArticle: DogArticle) {
-       /* if(dogArticle.facts!=null&&dogArticle.facts.size==1)
-            _dogArticleList[position].facts = dogArticle.facts
+            override fun onFailure(call: Call<DogArticle>, t: Throwable) {
+               updateItem( DogArticle(urlImg,mutableListOf()))
+            }
+        }
+        responseFact.enqueue(callback)
+        responseImg.enqueue(callback)
+        //mServiceImg.getDogImg().enqueue(t)
+        /*  dogApiFactsService.getDogFact().enqueue(t)
+      return DogArticle("", mutableListOf())*/
+    }
+
+    private fun updateItem( dogArticle: DogArticle) {
+        if(dogArticle.facts!=null&&dogArticle.facts.size==1)
+           _dogArticleList[_dogArticleList.size-1].facts = dogArticle.facts
         else
-            _dogArticleList[position].url = dogArticle.url
+            _dogArticleList[_dogArticleList.size-1].url = dogArticle.url
     //     if(dogArticle.facts[0]==null)
-     //  if(_dogArticleList[position].facts.size!=0&&_dogArticleList[position].url!="")
-            state.value = State.LoadedItemState(_dogArticleList[position])*/
+       if(_dogArticleList[_dogArticleList.size-1].facts.size!=0&&_dogArticleList[_dogArticleList.size-1].url!="")
+            state.value = State.LoadedItemState(_dogArticleList[_dogArticleList.size-1])
     }
 
     fun setFavorite(position: Int)

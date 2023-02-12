@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import implementations.DogArticlesRepositoryImpl
 import restAPI.DogApiFactsService
+import restAPI.DogApiImgService
 import javax.inject.Scope
 import javax.inject.Singleton
 import kotlin.reflect.KClass
@@ -36,8 +37,9 @@ class ArticleModule{
 
     @Feature
     @Provides
-    fun provideDogArticleRepo(dogApiFactsService: DogApiFactsService) : DogArticlesRepository {
-        return DogArticlesRepositoryImpl(dogApiFactsService)
+    fun provideDogArticleRepo(dogApiFactsService: DogApiFactsService,dogApiImgService: DogApiImgService)
+    : DogArticlesRepository {
+        return DogArticlesRepositoryImpl(dogApiFactsService,dogApiImgService)
     }
 
 //    @Singleton

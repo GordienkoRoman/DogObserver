@@ -27,10 +27,11 @@ import kotlin.reflect.KClass
 @Scope
 annotation class AppScope
 
-@[AppScope Component(modules = [AppModule::class,ViewModelModule::class])]
+@[AppScope Component(modules = [AppModule::class])]
 interface AppComponent : ArticlesDeps {
 
     override val factsService: DogApiFactsService
+    override val imgService: DogApiImgService
 
     @Component.Builder
     interface Builder {
@@ -43,28 +44,6 @@ interface AppComponent : ArticlesDeps {
 
 }
 
-@Module
-abstract class ViewModelModule {
-
-    @Target(
-        AnnotationTarget.FUNCTION,
-        AnnotationTarget.PROPERTY_GETTER,
-        AnnotationTarget.PROPERTY_SETTER
-    )
-    @Retention(AnnotationRetention.RUNTIME)
-    @MapKey
-    internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
-
-    @Binds
-    internal abstract fun bindViewModelFactory(factory: viewModelFactory): ViewModelProvider.Factory
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(DogsViewModel::class)
-    internal abstract fun dogsViewModel(viewModel: DogsViewModel): ViewModel
-
-
-}
 
 @Module
 class AppModule {
