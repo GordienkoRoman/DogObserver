@@ -6,12 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doglist.R
-import com.example.doglist.databinding.FragmentDogListBinding
 import com.squareup.picasso.Picasso
 import com.example.utils.models.DogArticle
 import java.lang.ref.WeakReference
 
-class DogArticleViewHolder( itemView: View, listener: DogsAdapter.onArticleListener): RecyclerView.ViewHolder(itemView)  {
+class DogArticleViewHolder( itemView: View, listener: ArticlesAdapter.onArticleListener): RecyclerView.ViewHolder(itemView)  {
     private val view = WeakReference(itemView)
     private var textViewTitle: TextView?=null
     private var imageView: ImageView?=null
@@ -46,7 +45,7 @@ class DogArticleViewHolder( itemView: View, listener: DogsAdapter.onArticleListe
 
 
 }
-class FooterViewHolder(itemView: View, listener: DogsAdapter.onArticleListener): RecyclerView.ViewHolder(itemView) {
+class FooterViewHolder(itemView: View, listener: ArticlesAdapter.onArticleListener): RecyclerView.ViewHolder(itemView) {
     private var loadButton: Button? = null
     init{
         loadButton=itemView.findViewById(R.id.loadButton)

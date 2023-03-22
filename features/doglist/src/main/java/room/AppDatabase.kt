@@ -8,6 +8,6 @@ import room.entities.ArticlesEntity
     version = 1,
     entities = [ArticlesEntity::class]
 )
-abstract class AppDatabase:RoomDatabase() {
-    abstract fun getsArticlesDao(): ArticlesDao
+abstract class  AppDatabase:RoomDatabase() {
+    abstract fun ArticlesDao(): ArticlesDao
 }

@@ -32,6 +32,7 @@ interface AppComponent : ArticlesDeps {
 
     override val factsService: DogApiFactsService
     override val imgService: DogApiImgService
+    //fun inject(application: Application)
 
     @Component.Builder
     interface Builder {

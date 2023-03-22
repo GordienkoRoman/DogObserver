@@ -16,8 +16,8 @@ class DogArticlesRepositoryImpl @Inject constructor(
 
     private val urlImg = "https://i.pinimg.com/564x/15/36/e7/1536e7de67f8f992c595a308ec8ae363.jpg"
 
-    override fun getDogFact() = dogApiFactsService.getDogFact()
-    override fun getDogImg() = dogApiImgService.getDogImg()
+    override suspend fun getDogFact() = dogApiFactsService.getDogFact()
+    override suspend fun getDogImg() = dogApiImgService.getDogImg()
 
 
 }

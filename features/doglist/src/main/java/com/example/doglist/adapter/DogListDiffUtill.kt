@@ -1,4 +1,4 @@
-package adapter
+package com.example.doglist.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.utils.models.DogArticle

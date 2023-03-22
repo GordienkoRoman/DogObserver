@@ -16,7 +16,7 @@
         tools:context=".DogListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/jobRecycler"
+            android:id="@+id/articlesRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -1,12 +1,14 @@
 package di
 
 import Repository.DogArticlesRepository
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.doglist.DogListFragment
-import dagger.Component
-import dagger.MapKey
-import dagger.Module
-import dagger.Provides
+import dagger.*
+import di.modules.ArticleModule
+import di.modules.DataBaseModule
+import favourites.FavouritesFragment
 import implementations.DogArticlesRepositoryImpl
 import restAPI.DogApiFactsService
 import restAPI.DogApiImgService
@@ -18,9 +20,10 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Feature
 
-@[Feature Component(modules = [ArticleModule::class],dependencies = [ArticlesDeps::class])]
+@[Feature Component(modules = [ArticleModule::class,DataBaseModule::class],dependencies = [ArticlesDeps::class])]
 internal interface ArticlesComponent {
     fun inject(fragment: DogListFragment)
+    fun inject(fragment: FavouritesFragment)
 
     @Component.Builder
     interface Builder
@@ -28,28 +31,19 @@ internal interface ArticlesComponent {
      //   fun dependencies(dependencies: ArticlesDependencies): Builder
         fun deps(deps: ArticlesDeps):Builder
 
+       @BindsInstance
+        fun application(viewModel: ArticlesComponentViewModel): Builder
+
+        @BindsInstance
+        fun context(context: Context):Builder
+
+
         fun Build(): ArticlesComponent
     }
 
 }
-@Module
-class ArticleModule{
 
-    @Feature
-    @Provides
-    fun provideDogArticleRepo(dogApiFactsService: DogApiFactsService,dogApiImgService: DogApiImgService)
-    : DogArticlesRepository {
-        return DogArticlesRepositoryImpl(dogApiFactsService,dogApiImgService)
-    }
 
-//    @Singleton
-//    @Provides
-//    fun provideDogsViewModel(dogArticlesRepository: DogArticlesRepository):DogsViewModel
-//    {
-//        return DogsViewModel(dogArticlesRepository)
-//
-//    }
-}
 
 
 

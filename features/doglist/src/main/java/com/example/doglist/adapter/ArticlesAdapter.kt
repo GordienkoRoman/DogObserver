@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.doglist.R
 import com.example.utils.models.DogArticle
 
-public class DogsAdapter(onArticleListener: onArticleListener) :
+public class ArticlesAdapter(onArticleListener: onArticleListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var dogArticleList = mutableListOf<DogArticle>()
         set(newValue) {
@@ -58,15 +58,24 @@ public class DogsAdapter(onArticleListener: onArticleListener) :
         }
     }
 
+    fun updateImg(article: DogArticle){
+        dogArticleList[dogArticleList.size-1].url = article.url
+        notifyItemChanged(dogArticleList.size-1)
+    }
+    fun updateFacts(article: DogArticle)
+    {
+        dogArticleList[dogArticleList.size-1].facts = article.facts
+        notifyItemChanged(dogArticleList.size-1)
+    }
+
     fun insertItem(item: DogArticle) {
-        dogArticleList.add( item)
+        dogArticleList.add(item)
         notifyItemInserted(dogArticleList.size)
     }
 
     override fun getItemCount(): Int {
         return dogArticleList.count() + 1
     }
-
 
 
     interface onArticleListener {

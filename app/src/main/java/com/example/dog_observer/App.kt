@@ -20,7 +20,9 @@ class App : Application(){
     }*/
     override fun onCreate() {
         super.onCreate()
-      appComponent = DaggerAppComponent.builder().application(this).build()
+      appComponent = DaggerAppComponent.builder()
+          .application(this)
+          .build()
       ArticleDepsStore.deps= appComponent
         // Don't do this! This is just so cold launches take some time
      //  SystemClock.sleep(TimeUnit.SECONDS.toMillis(2))

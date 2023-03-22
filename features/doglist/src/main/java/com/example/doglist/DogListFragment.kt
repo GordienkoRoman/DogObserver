@@ -1,6 +1,6 @@
 package com.example.doglist
 
-import DogsAdapter
+import ArticlesAdapter
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,21 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.example.doglist.databinding.FragmentDogListBinding
 import com.example.utils.models.DogArticle
-import di.ArticlesComponent
 import di.ArticlesComponentViewModel
+import di.ArticlesComponentFactory
 import room.AppDatabase
-import room.RoomArticlesRepository
 import javax.inject.Inject
 
-class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
+class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
 
 
   /*  private val component by lazy{
@@ -45,12 +42,11 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
     }*/
 
     private lateinit var database: AppDatabase
-    private lateinit var articlesRepository: RoomArticlesRepository
 
-    private val dogAdapter = DogsAdapter(this)
+    private val dogAdapter = ArticlesAdapter(this)
 
     override fun onAttach(context: Context) {
-        ViewModelProvider(this).get<ArticlesComponentViewModel>()
+        ViewModelProvider(this,ArticlesComponentFactory(context)).get<ArticlesComponentViewModel>()
             .component.inject(this)
         //ViewModelProvider(this).get<ArticlesComponent
       /*  val artComponent: ArticlesComponent by lazy {
@@ -68,7 +64,7 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
     ): View? = inflater
         .inflate(R.layout.fragment_dog_list, container, false)
         .apply {
-            findViewById<RecyclerView>(R.id.jobRecycler).apply {
+            findViewById<RecyclerView>(R.id.articlesRecycler).apply {
                 adapter= dogAdapter
                 layoutManager = LinearLayoutManager(
                     requireContext(),
@@ -86,17 +82,25 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
                     {
                         dogAdapter.insertItem(state.item as DogArticle)
                     }
+                    is State.LoadedImgState<*> ->
+                    {
+                        dogAdapter.updateImg(state.item as DogArticle)
+                    }
+                    is State.LoadedFactsState<*> ->
+                    {
+                        dogAdapter.updateFacts(state.item as DogArticle)
+                    }
                     else ->{
 
                     }
                 }
 
             }
-            database =  Room.databaseBuilder(context,AppDatabase::class.java,"database.db")
-                .createFromAsset("database.db")
-                .allowMainThreadQueries()
-                .build()
-            articlesRepository = RoomArticlesRepository(database.getsArticlesDao())
+//            database =  Room.databaseBuilder(context,
+//                com.example.dog_observer.room.AppDatabase::class.java,"database.db")
+//                .createFromAsset("database.db")
+//                .allowMainThreadQueries()
+//                .build()
 
     }
 
@@ -117,6 +121,7 @@ class DogListFragment : Fragment(),DogsAdapter.onArticleListener  {
 
     override fun onArticleClick(position: Int) {
       //  viewModel.setFavorite(position)
+        dogsViewModel.insertItem(position)
 
 
     }

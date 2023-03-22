@@ -1,4 +1,4 @@
-package com.example.dog_observer.dagger
+package com.example.dog_observer.viewModelFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

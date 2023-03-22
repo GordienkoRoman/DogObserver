@@ -9,7 +9,6 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class MainActivityVeiwModel @Inject constructor(
-    retrofit: Retrofit
 ) : ViewModel() {
     public val str = "123"
 
