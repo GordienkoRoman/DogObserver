@@ -1,7 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+
     dependencies {
-        classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.gms:google-services:4.3.15'
         def nav_version = "2.4.2"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
@@ -16,6 +17,13 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 ext {
+    sdk_version = 33
 
+    kotlin_version = "2.6.1"
+    retrofit_version = "2.9.0"
     fragment_version = "1.5.0"
+    dagger_version = "2.44.2"
+    nav_version = "2.5.3"
+    livedata_version = "2.6.1"
+    room_version = "2.4.3"
 }

@@ -1,11 +1,14 @@
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doglist.R
 import com.example.utils.models.DogArticle
+import java.io.File
 
-public class ArticlesAdapter(onArticleListener: onArticleListener) :
+class ArticlesAdapter(onArticleListener: onArticleListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var dogArticleList = mutableListOf<DogArticle>()
         set(newValue) {
@@ -14,12 +17,10 @@ public class ArticlesAdapter(onArticleListener: onArticleListener) :
         }
 
     private companion object {
-        const val HEADER_VIEW_TYPE = 1
         const val FOOTER_VIEW_TYPE = 2
     }
 
     private val listener = onArticleListener
-    //private val mListener: OnItemClickListener = OnItemClickListener()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newArticles: MutableList<DogArticle>) {
@@ -78,8 +79,9 @@ public class ArticlesAdapter(onArticleListener: onArticleListener) :
     }
 
 
+
     interface onArticleListener {
-        fun onArticleClick(position: Int)
+        fun onArticleClick(position: Int, bitmap: Bitmap,path : String)
         fun onFooterClick()
     }
 }

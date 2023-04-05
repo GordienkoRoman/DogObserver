@@ -6,4 +6,5 @@ sealed class State  {
     class LoadedImgState<T>(val item: T) : State()
     class ErrorState : State()
     class LoadedState<T>(val data: List<T>) : State()
+    class DeletedState<Int>(val position : Int) : State()
 }

@@ -1,12 +1,10 @@
 package favourites
 
-import Repository.DogArticlesRepository
 import State
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.doglist.DogsViewModel
 import com.example.utils.models.DogArticle
 import kotlinx.coroutines.launch
 import room.RoomArticlesRepository
@@ -16,14 +14,24 @@ class FavouritesViewModel @Inject constructor(
     private val roomArticlesRepository: RoomArticlesRepository) :
     ViewModel() {
     val state = MutableLiveData<State>(State.DefaultState())
-    // TODO: Implement the ViewModel
-    fun onGoToImdbClicked() {
+
+    private val _dogFavArticleList = mutableListOf<DogArticle>()
+    val dogFavArticleList
+        get() = _dogFavArticleList
+    fun loadArticles()
+    {
+        _dogFavArticleList.clear()
+        viewModelScope.launch {
+            _dogFavArticleList.addAll(roomArticlesRepository.loadArticles())
+            state.value = State.LoadedState(_dogFavArticleList)
+        }
 
     }
-    fun loadItems()
+    fun deleteArticle(position: Int)
     {
         viewModelScope.launch {
-            state.value = State.LoadedState(roomArticlesRepository.loadArticles())
+            state.value = State.DeletedState(roomArticlesRepository.deleteArticle(_dogFavArticleList[position].facts[0]))
+            _dogFavArticleList.removeAt(position)
         }
     }
     class FavouritessViewModelFactory @Inject constructor( private val roomArticlesRepository: RoomArticlesRepository) :

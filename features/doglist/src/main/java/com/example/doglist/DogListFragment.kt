@@ -2,6 +2,8 @@ package com.example.doglist
 
 import ArticlesAdapter
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +18,9 @@ import com.example.doglist.databinding.FragmentDogListBinding
 import com.example.utils.models.DogArticle
 import di.ArticlesComponentViewModel
 import di.ArticlesComponentFactory
+import kotlinx.coroutines.*
 import room.AppDatabase
+import java.io.*
 import javax.inject.Inject
 
 class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
@@ -33,6 +37,8 @@ class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
 
     companion object {
         fun newInstance() = DogListFragment()
+        private val urlImg = "https://i.pinimg.com/564x/15/36/e7/1536e7de67f8f992c595a308ec8ae363.jpg"
+
     }
     private var _binding: FragmentDogListBinding? = null
     private val binding get() = requireNotNull(_binding) { "Binding not set" }
@@ -113,22 +119,57 @@ class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
 
     }
 
+
     override fun onDestroyView() {
        // viewModel.state.value=State.DefaultState()
         _binding=null
         super.onDestroyView()
     }
+    suspend fun Context.saveBitmap(fileName: String, bitmap: Bitmap) = withContext(Dispatchers.IO) {
+        val file = File(filesDir, fileName)
+        file.outputStream().use {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
+    }
 
-    override fun onArticleClick(position: Int) {
+    override fun onArticleClick(position: Int,bitmap: Bitmap,path : String) {
       //  viewModel.setFavorite(position)
-        dogsViewModel.insertItem(position)
-
+       GlobalScope.launch {
+           val fileName =  bitmap.toString()
+           try {
+                requireContext().saveBitmap(fileName, bitmap)
+                // show success message to user
+            } catch (e: IOException) {
+                // show error message to user
+            }
+           dogsViewModel.insertItem(position,mapToPath(fileName))
+        }
 
     }
 
+
+
+    fun openFile(uri: Uri) {
+        val file = File(requireContext().filesDir, "122343.jpg")
+
+        FileOutputStream(file).use {
+           val bytes = "123".toByteArray()
+            it.write(bytes)
+        }
+
+      /*  val data = requireContext().contentResolver.openInputStream(uri)?.use {
+            String(it.readBytes())
+        }*/
+    }
+    private fun mapToPath(fileName: String):String
+    {
+        return requireContext().filesDir.canonicalPath+"/"+fileName
+    }
+
     override fun onFooterClick() {
-        dogsViewModel.loadData(dogsViewModel.dogArticleList.size)
+        dogsViewModel.loadData()
 
         // .adapter?.let { viewModel.loadData(it.itemCount - 1) }
     }
 }
+//requireContext().filesDir.canonicalPath+"/myFile.png"

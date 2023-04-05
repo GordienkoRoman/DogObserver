@@ -12,8 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.doglist.DogListFragment
-import com.example.doglist.DogsViewModel
 import com.example.doglist.R
 import com.example.utils.models.DogArticle
 import di.ArticlesComponentFactory
@@ -58,6 +56,11 @@ class FavouritesFragment : Fragment(),ArticlesFavAdapter.onArticleListener {
                         is State.LoadedState<*> -> {
                             favArticlesAdapter.setData(state.data as MutableList<DogArticle>)
                         }
+                        is State.DeletedState<*> ->{
+                            if(state.position is Int)
+                               favArticlesAdapter.deleteItem(state.position)
+
+                        }
                         else -> {
 
                         }
@@ -68,10 +71,10 @@ class FavouritesFragment : Fragment(),ArticlesFavAdapter.onArticleListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadItems()
+        viewModel.loadArticles()
     }
     override fun onArticleClick(position: Int) {
-        TODO("Not yet implemented")
+        viewModel.deleteArticle(position)
     }
 
 }
