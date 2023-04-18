@@ -1,10 +1,9 @@
 package com.example.dog_observer
 
 import android.app.Application
-import com.example.dog_observer.dagger.AppComponent
-import com.example.dog_observer.dagger.DaggerAppComponent
-import di.ArticleDepsStore
-import javax.inject.Inject
+import com.example.dog_observer.di.AppComponent
+import com.example.dog_observer.di.DaggerAppComponent
+import com.example.di.components.ArticleDepsStore
 
 
 class App : Application(){

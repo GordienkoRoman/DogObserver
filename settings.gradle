@@ -16,4 +16,3 @@ rootProject.name = "Dog_Observer"
 include ':app'
 include ':features:doglist'
 include ':core:utils'
-include ':features:favourites'
