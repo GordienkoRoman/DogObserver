@@ -14,6 +14,7 @@ import com.example.data.local.RoomArticlesRepository
 import javax.inject.Inject
 
 
+@Suppress("UNCHECKED_CAST")
 class DogsViewModel @Inject constructor(
     private val repository: DogArticlesRepository,
     private val roomArticlesRepository: RoomArticlesRepository
@@ -21,16 +22,14 @@ class DogsViewModel @Inject constructor(
 ) : ViewModel() {
     val state = MutableLiveData<State>(State.DefaultState())
 
-    private val urlImg = "https://i.pinimg.com/564x/15/36/e7/1536e7de67f8f992c595a308ec8ae363.jpg"
-
     private val _dogArticleList = mutableListOf<DogArticle>()
     val dogArticleList
         get() = _dogArticleList
 
     fun loadData() {
         state.value = State.LoadingState()
-        _dogArticleList.add(DogArticle(urlImg, mutableListOf()))
-        state.value = State.LoadedItemState(DogArticle(urlImg, mutableListOf("...")))
+        _dogArticleList.add(DogArticle())
+        state.value = State.LoadedItemState(DogArticle(facts = mutableListOf("loading...")))
         viewModelScope.launch {
             getItem()
         }
@@ -62,22 +61,27 @@ class DogsViewModel @Inject constructor(
     }
 
 
-  fun insertItem(position: Int,path: String)
-    {
-        _dogArticleList[position].url = path
-        _dogArticleList[position].isFavourite = !_dogArticleList[position].isFavourite
+    fun insertItem(position: Int, path: String) {
         viewModelScope.launch {
-            roomArticlesRepository.insertArticle(_dogArticleList[position])
+            roomArticlesRepository.insertArticle(
+                DogArticle(url = path,
+                    facts = _dogArticleList[position].facts,
+                    isFavourite = !_dogArticleList[position].isFavourite
+                )
+            )
         }
 
     }
 
-    class DogsViewModelFactory @Inject constructor(private val repository: DogArticlesRepository, private val roomArticlesRepository: RoomArticlesRepository) :
+    class DogsViewModelFactory @Inject constructor(
+        private val repository: DogArticlesRepository,
+        private val roomArticlesRepository: RoomArticlesRepository
+    ) :
         ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(DogsViewModel::class.java)) {
-                DogsViewModel(this.repository,this.roomArticlesRepository) as T
+                DogsViewModel(this.repository, this.roomArticlesRepository) as T
             } else {
                 throw IllegalArgumentException("ViewModel Not Found")
             }

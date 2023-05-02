@@ -36,8 +36,6 @@ interface AppComponent : ArticlesDeps {
 
 @Module
 class AppModule {
-    /*  @Provides
-      fun providesArticleService(): DogApiImgService = DogApiImgService()*/
 
 
     @Provides
@@ -70,18 +68,6 @@ class AppModule {
         return retrofit.create(DogApiImgService::class.java)
     }
 
-
-    /*@Provides
-    @Singleton
-    fun provideRetrofitBuilder(
-        converterFactory: GsonConverterFactory,
-        context: Context
-    ): Retrofit {
-       return Retrofit.Builder()
-            .baseUrl("https://dog-api.kinduff.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }*/
 
 }
 

@@ -6,6 +6,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="light_pink">#E6399B</color>
-    <color name="holo_orange_dark">#ffff8800</color>
+    <color name="light_pink">#FFCCFF</color>
+    <color name="gray_dark">#ff404040</color>
+    <color name="colorPrimary">#333F48</color>
+    <color name="colorPrimaryDark">#252E34</color>
+    <color name="colorAccent">#2196F3</color>
+
+    <color name="bottomSheetDrag">#AAAAAA</color>
 </resources>

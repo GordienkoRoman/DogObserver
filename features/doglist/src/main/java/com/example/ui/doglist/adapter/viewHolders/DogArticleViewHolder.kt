@@ -1,10 +1,11 @@
+import androidx.core.view.ViewCompat
 import androidx.core.view.drawToBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doglist.R
 import com.example.doglist.databinding.DogViewItemBinding
 import com.squareup.picasso.Picasso
 import com.example.utils.models.DogArticle
-import com.squareup.picasso.MemoryPolicy
+
 
 class DogArticleViewHolder(
     private val binding: DogViewItemBinding,
@@ -16,9 +17,13 @@ class DogArticleViewHolder(
     init {
         binding.apply {
             favSwitcher.setOnClickListener {
-                val bitmap = dogImage.drawToBitmap()
-                listener.onArticleClick(adapterPosition, bitmap, dogImage.id.toString())
-                favSwitcher.showNext()
+                if (!ViewCompat.isLaidOut(it)) {
+                    throw IllegalStateException("View needs to be laid out before calling drawToBitmap()")
+                } else {
+                    val bitmap = dogImage.drawToBitmap()
+                    listener.onArticleClick(adapterPosition, bitmap, dogImage.id.toString())
+                    favSwitcher.showNext()
+                }
             }
         }
     }
@@ -26,13 +31,9 @@ class DogArticleViewHolder(
 
     fun updateView() {
        binding.dogFact.text = dogArticle?.facts?.get(0)
-        if (dogArticle?.url != null) {
-            //val file = File(dogArticle?.url)
+        if (dogArticle?.url != null&&dogArticle?.url!="") {
             Picasso.get()
-                // .load(file)
                 .load(dogArticle?.url)
-                .memoryPolicy(MemoryPolicy.NO_CACHE)
-                //.load("https://i.pinimg.com/564x/15/36/e7/1536e7de67f8f992c595a308ec8ae363.jpg")
                 .error(R.drawable.genuine_beauty)
                 .into(binding.dogImage)
         }

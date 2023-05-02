@@ -23,6 +23,7 @@ import kotlinx.coroutines.*
 import java.io.*
 import javax.inject.Inject
 
+@Suppress("UNCHECKED_CAST")
 class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
 
 
@@ -94,7 +95,6 @@ class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
 
                     }
                 }
-
             }
     }
 
@@ -103,8 +103,6 @@ class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDogListBinding.bind(view)
-
-
     }
 
 
@@ -118,9 +116,15 @@ class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
         }
     }
+    private fun mapToPath(fileName: String):String
+    {
+        return requireContext().filesDir.canonicalPath+"/"+fileName
+    }
 
     override fun onArticleClick(position: Int,bitmap: Bitmap,path : String) {
-      //  viewModel.setFavorite(position)
+
+
+        //  viewModel.setFavorite(position)
        GlobalScope.launch {
            val fileName =  bitmap.toString()
            try {
@@ -131,14 +135,8 @@ class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
             }
            dogsViewModel.insertItem(position,mapToPath(fileName))
         }
-
     }
 
-
-    private fun mapToPath(fileName: String):String
-    {
-        return requireContext().filesDir.canonicalPath+"/"+fileName
-    }
 
     override fun onFooterClick() {
         dogsViewModel.loadData()

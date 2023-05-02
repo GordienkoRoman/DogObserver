@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dog_observer.MainActivity
@@ -15,8 +14,6 @@ import com.example.dog_observer.di.DaggerLoginComponent
 import com.example.dog_observer.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 
@@ -27,17 +24,19 @@ class LoginActivity : AppCompatActivity() {
         DaggerLoginComponent.builder()
             .Build()
     }
-    private lateinit var binding: ActivityLoginBinding
+   // private lateinit var binding: ActivityLoginBinding
     private val viewModel by viewModels<LoginActivityViewModel>(){
         component.viewModelFactory()
     }
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var getContent: ActivityResultLauncher<Intent>
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = requireNotNull(_binding) { "Binding not set" }
+   // private lateinit var mGoogleSignInClient: GoogleSignInClient
+    //private lateinit var getContent: ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+   /*     val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -46,23 +45,16 @@ class LoginActivity : AppCompatActivity() {
                 val task: Task<GoogleSignInAccount> =
                     GoogleSignIn.getSignedInAccountFromIntent(it.data)
                 handleSignInResult(task)
-        }
+        }*/
     }
     fun onClick(view: View)
     {
-        val signInIntent = mGoogleSignInClient.signInIntent
+       // val signInIntent = mGoogleSignInClient.signInIntent
    //     getContent.launch(signInIntent)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         val acct = GoogleSignIn.getLastSignedInAccount(this)
-        if (acct != null) {
-            val personName = acct.displayName
-            val personGivenName = acct.givenName
-            val personFamilyName = acct.familyName
-            val personEmail = acct.email
-            val personId = acct.id
-            val personPhoto: Uri? = acct.photoUrl
-        }
+
 
     }
 
@@ -81,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
         // TODO: user already signed
     }
 
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+  /*  private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
             Toast.makeText(this,"SUCCESS",Toast.LENGTH_SHORT).show()
@@ -94,5 +86,9 @@ class LoginActivity : AppCompatActivity() {
             Log.w("TAG", "signInResult:failed code=" + e.statusCode)
             updateUI(null)
         }
+    }*/
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }
