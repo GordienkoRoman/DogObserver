@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.dog_observer.MainActivity
 import com.example.dog_observer.di.DaggerLoginComponent
 import com.example.dog_observer.databinding.ActivityLoginBinding
@@ -33,7 +34,9 @@ class LoginActivity : AppCompatActivity() {
    // private lateinit var mGoogleSignInClient: GoogleSignInClient
     //private lateinit var getContent: ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
+       installSplashScreen()
         super.onCreate(savedInstanceState)
+
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
    /*     val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -61,10 +64,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         val account = GoogleSignIn.getLastSignedInAccount(this)
-        if(account != null)
-        {
-            Toast.makeText(this,viewModel.str ,Toast.LENGTH_SHORT).show()
-        }
         super.onStart()
     }
 

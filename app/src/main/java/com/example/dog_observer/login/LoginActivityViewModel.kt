@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 class LoginActivityViewModel @Inject constructor(
 ): ViewModel() {
-    val str = "loginviewmodel"
     init {
         if (!userLoggedIn) {
         }

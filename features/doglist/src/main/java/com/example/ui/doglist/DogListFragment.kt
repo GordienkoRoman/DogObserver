@@ -27,10 +27,6 @@ import javax.inject.Inject
 class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
 
 
-  /*  private val component by lazy{
-        DaggerArticlesComponent.builder()
-            .Build()
-    }*/
   @Inject
   lateinit var viewModelFactory: DogsViewModel.DogsViewModelFactory
 
@@ -49,13 +45,7 @@ class DogListFragment : Fragment(),ArticlesAdapter.onArticleListener  {
     override fun onAttach(context: Context) {
         ViewModelProvider(this, ArticlesComponentFactory(context)).get<ArticlesComponentViewModel>()
             .component.inject(this)
-        //ViewModelProvider(this).get<ArticlesComponent
-      /*  val artComponent: ArticlesComponent by lazy {
-            DaggerArticlesComponent.builder()
-                .Build()
 
-        }
-        artComponent.inject(this)*/
         super.onAttach(context)
     }
     override fun onCreateView(
