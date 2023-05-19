@@ -1,10 +1,13 @@
 import androidx.core.view.ViewCompat
 import androidx.core.view.drawToBitmap
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doglist.R
 import com.example.doglist.databinding.DogViewItemBinding
-import com.squareup.picasso.Picasso
 import com.example.utils.models.DogArticle
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
+import java.lang.Exception
 
 
 class DogArticleViewHolder(
@@ -35,8 +38,19 @@ class DogArticleViewHolder(
             Picasso.get()
                 .load(dogArticle?.url)
                 .error(R.drawable.genuine_beauty)
-                .into(binding.dogImage)
+                .into(binding.dogImage, object : Callback.EmptyCallback() {
+                    override fun onSuccess() {
+                        binding.favSwitcher.isVisible=true
+                    }
+
+                    override fun onError(e: Exception?) {
+                        super.onError(e)
+                        binding.favSwitcher.isVisible=true
+                    }
+                })
         }
+
+
     }
 }
 

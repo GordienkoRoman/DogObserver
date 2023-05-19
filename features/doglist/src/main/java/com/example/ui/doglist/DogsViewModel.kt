@@ -39,9 +39,13 @@ class DogsViewModel @Inject constructor(
 
     private suspend fun getItem() {
         withContext(Dispatchers.IO) {
-            val fact = repository.getDogFact()
+
+            //сайт почему-то перестал работать unlucky :(
+            _dogArticleList[_dogArticleList.size - 1].facts = mutableListOf("*random fact")
+            state.postValue(State.LoadedFactsState(_dogArticleList[_dogArticleList.size - 1]))
+            /*val fact = repository.getDogFact()
             if (fact.isSuccessful)
-                updateItem(fact.body() as DogArticle)
+                updateItem(fact.body() as DogArticle)*/
             val img = repository.getDogImg()
             if (img.isSuccessful)
                 updateItem(img.body() as DogArticle)
@@ -51,6 +55,7 @@ class DogsViewModel @Inject constructor(
     }
 
     private fun updateItem(dogArticle: DogArticle) {
+        //проверяем что пришло, факт или картинка
         if (dogArticle.facts != null && dogArticle.facts.size == 1) {
             _dogArticleList[_dogArticleList.size - 1].facts = dogArticle.facts
             state.postValue(State.LoadedFactsState(_dogArticleList[_dogArticleList.size - 1]))
